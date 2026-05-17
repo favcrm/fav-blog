@@ -1,0 +1,12 @@
+.DS_Store
+._.DS_Store
+node_modules
+/.svelte-kit
+/build
+/dist
+/.vercel
+.env
+.env.*
+!.env.example
+pnpm-debug.log*
+.playwright-mcp/
