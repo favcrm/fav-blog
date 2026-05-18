@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@favcrm/sdk':
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.4.1
+        version: 1.4.1
       '@sveltejs/adapter-vercel':
         specifier: ^5.10.2
         version: 5.10.3(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.55.7(@typescript-eslint/types@8.59.3))(vite@6.4.2(@types/node@22.19.19)(jiti@1.21.7)))(svelte@5.55.7(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@6.4.2(@types/node@22.19.19)(jiti@1.21.7)))(rollup@4.60.4)
@@ -282,8 +282,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@favcrm/sdk@1.4.0':
-    resolution: {integrity: sha512-VnWfhguiBB1mHnhiFeFjMIpyfpRAeHJBULxneDnbm1fpWsICxV72vLtbb8gVV+Exg5G/RmvbThejG1xVqCV9SA==}
+  '@favcrm/sdk@1.4.1':
+    resolution: {integrity: sha512-a69qxYr8QC2S7DWZJV3kKlDc/g/8BKjHTRDC5kEpvMp/fLC1tGZH36mKcSFpJdomxW/ZauyR4cZ0X15QR9cHkA==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -1805,7 +1805,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@favcrm/sdk@1.4.0': {}
+  '@favcrm/sdk@1.4.1': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
