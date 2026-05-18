@@ -150,17 +150,18 @@
   .article-head h1 {
     margin: 0.7rem 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2.2rem, 6vw, 4rem);
-    line-height: 1.04;
-    letter-spacing: -0.032em;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .article-standfirst {
-    margin: 1.1rem 0 0;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    margin: 1.2rem 0 0;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
     line-height: 1.45;
     color: var(--ink-soft);
   }
@@ -226,9 +227,10 @@
   .related h2 {
     margin: 0 0 8px;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: 1.5rem;
     letter-spacing: -0.02em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .related-list {
@@ -251,8 +253,10 @@
   }
   .related-title {
     font-family: var(--font-display);
+    font-weight: 700;
     font-size: 1.3rem;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .related-item:hover .related-title {

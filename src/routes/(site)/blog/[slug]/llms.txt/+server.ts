@@ -4,8 +4,11 @@ import { blocksToMarkdown } from "$lib/utils/markdown";
 import type { RequestHandler } from "./$types";
 
 /** Agent-friendly Markdown rendering of a single essay. */
-export const GET: RequestHandler = async ({ params, fetch, url }) => {
-  const post = await getPost(fetch, params.slug);
+export const GET: RequestHandler = async ({ params, fetch, url, locals }) => {
+  const post = await getPost(params.slug, {
+    fetch,
+    companyId: locals.companyId,
+  });
   if (!post) throw error(404, "Essay not found");
 
   const date = post.publishedAt

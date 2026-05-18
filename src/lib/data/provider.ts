@@ -1,21 +1,23 @@
 /**
  * Data provider — the single boundary the UI talks to for blog content.
  *
- * Demo mode (no VITE_FAVCRM_COMPANY_ID): serves the seed content in `./mock`.
+ * Demo mode (no workspace resolved): serves the seed content in `./mock`.
  * Live mode: calls the FavCRM workspace through `@favcrm/sdk`.
  *
- * Every route loader calls these functions and never imports the SDK or the
- * mock data directly, so the two modes stay swappable.
+ * The workspace is resolved per request — from the deployment hostname, or
+ * from `VITE_FAVCRM_COMPANY_ID` as a fallback. Every function takes a
+ * `ProviderContext` ({ fetch, companyId }) as its last argument; `load`
+ * functions pass it so requests correlate with the render and target the
+ * right workspace. Route loaders never import the SDK or the mock data
+ * directly, so the two modes stay swappable.
  */
-import { isLiveMode } from "$lib/config";
 import { createFavCRM } from "$lib/favcrm";
+import { isLive, type ProviderContext } from "$lib/config";
 import type { BlogCategory, BlogPost, PostListResult } from "./types";
 import { posts, postListItems } from "./mock/posts";
 import { categories as mockCategories } from "./mock/categories";
 
-export { isLiveMode };
-
-type FetchFn = typeof globalThis.fetch;
+export { isLive, type ProviderContext };
 
 export interface PostQuery {
   category?: string;
@@ -26,14 +28,14 @@ export interface PostQuery {
 
 /** List published posts, filtered and paginated. */
 export async function listPosts(
-  fetchFn: FetchFn,
   query: PostQuery = {},
+  ctx?: ProviderContext,
 ): Promise<PostListResult> {
   const limit = query.limit ?? 12;
   const page = Math.max(1, query.page ?? 1);
 
-  if (isLiveMode()) {
-    const sdk = createFavCRM(fetchFn);
+  if (isLive(ctx)) {
+    const sdk = createFavCRM(ctx);
     const res = await sdk.blog.list({
       category: query.category,
       search: query.search,
@@ -80,11 +82,11 @@ export async function listPosts(
 
 /** Fetch a single post by slug, or null if it does not exist. */
 export async function getPost(
-  fetchFn: FetchFn,
   slug: string,
+  ctx?: ProviderContext,
 ): Promise<BlogPost | null> {
-  if (isLiveMode()) {
-    const sdk = createFavCRM(fetchFn);
+  if (isLive(ctx)) {
+    const sdk = createFavCRM(ctx);
     try {
       return await sdk.blog.getBySlug(slug);
     } catch {
@@ -99,10 +101,10 @@ export async function getPost(
  * derives the set from recent posts.
  */
 export async function listCategories(
-  fetchFn: FetchFn,
+  ctx?: ProviderContext,
 ): Promise<BlogCategory[]> {
-  if (isLiveMode()) {
-    const sdk = createFavCRM(fetchFn);
+  if (isLive(ctx)) {
+    const sdk = createFavCRM(ctx);
     const res = await sdk.blog.list({ limit: 100 }).catch(() => null);
     const seen = new Map<string, BlogCategory>();
     for (const post of res?.items ?? []) {
@@ -115,14 +117,14 @@ export async function listCategories(
 
 /** Posts related to `post` — same category, excluding itself. */
 export async function listRelatedPosts(
-  fetchFn: FetchFn,
   post: BlogPost,
   limit = 3,
+  ctx?: ProviderContext,
 ): Promise<PostListResult["items"]> {
   const categorySlug = post.categories[0]?.slug;
-  const result = await listPosts(fetchFn, {
-    category: categorySlug,
-    limit: limit + 1,
-  });
+  const result = await listPosts(
+    { category: categorySlug, limit: limit + 1 },
+    ctx,
+  );
   return result.items.filter((p) => p.slug !== post.slug).slice(0, limit);
 }

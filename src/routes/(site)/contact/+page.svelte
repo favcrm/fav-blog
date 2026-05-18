@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Check, Mail } from "lucide-svelte";
-  import { isLiveMode } from "$lib/config";
   import { createFavCRM } from "$lib/favcrm";
   import Field from "$lib/components/site/Field.svelte";
   import Button from "$lib/components/site/Button.svelte";
@@ -16,6 +15,8 @@
   let loading = $state(false);
 
   const brandEmail = $derived(data.tenant.brandEmail);
+  // `tenant.isLive` reflects the per-request resolved workspace.
+  const isLive = $derived(data.tenant.isLive);
 
   async function submit() {
     if (!name.trim() || !email.trim() || !message.trim()) {
@@ -26,13 +27,17 @@
     loading = true;
     status = "";
     try {
-      if (isLiveMode()) {
-        await createFavCRM().contact.submit({ name, email, message });
+      if (isLive) {
+        await createFavCRM({ companyId: data.companyId }).contact.submit({
+          name,
+          email,
+          message,
+        });
       } else {
         // Demo mode — no workspace to send to; simulate the success state.
         await new Promise((r) => setTimeout(r, 500));
       }
-      status = isLiveMode()
+      status = isLive
         ? "Thank you. Your message has been sent."
         : "Demo mode — connect a workspace to receive real messages.";
       success = true;
@@ -112,10 +117,11 @@
   .contact-intro h1 {
     margin: 14px 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2.4rem, 6vw, 4rem);
-    line-height: 1;
-    letter-spacing: -0.035em;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .contact-lead {

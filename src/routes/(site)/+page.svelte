@@ -110,20 +110,22 @@
   .hero-title {
     margin: clamp(24px, 4vw, 44px) 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(3.5rem, 13vw, 9rem);
-    line-height: 0.92;
+    line-height: 0.86;
     letter-spacing: -0.04em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .hero-tagline {
     margin: clamp(18px, 3vw, 30px) 0 0;
-    max-width: 30ch;
+    max-width: 22ch;
     font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 400;
+    font-weight: 700;
     font-size: clamp(1.35rem, 3vw, 2rem);
-    line-height: 1.25;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
     color: var(--accent);
   }
   .hero-desc {
@@ -166,13 +168,16 @@
     display: block;
     padding: clamp(28px, 4vw, 52px);
     background: var(--surface);
-    border: 1px solid var(--line);
+    border: 2px solid var(--ink);
     border-radius: var(--radius-card);
     color: inherit;
-    transition: border-color 200ms ease;
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease;
   }
   .featured-card:hover {
-    border-color: var(--ink);
+    transform: translate(-5px, -5px);
+    box-shadow: 10px 10px 0 var(--ink);
   }
   .featured-meta {
     display: flex;
@@ -190,10 +195,11 @@
   .featured-title {
     margin: 0.6rem 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2rem, 5.2vw, 3.6rem);
-    line-height: 1.05;
+    line-height: 0.98;
     letter-spacing: -0.03em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .featured-excerpt {
@@ -223,9 +229,10 @@
   .recent-head h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(1.5rem, 3vw, 2.1rem);
     letter-spacing: -0.02em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .recent-head a {

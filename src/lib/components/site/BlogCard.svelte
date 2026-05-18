@@ -59,8 +59,8 @@
   }
   .entry-no {
     font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-style: italic;
+    font-size: 1rem;
+    font-weight: 700;
     color: var(--accent);
   }
   .entry-thumb {
@@ -95,10 +95,11 @@
   .entry-title {
     margin: 0.5rem 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 700;
     font-size: clamp(1.4rem, 2.6vw, 2rem);
-    line-height: 1.15;
-    letter-spacing: -0.018em;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
     color: var(--ink);
     transition: color 160ms ease;
   }

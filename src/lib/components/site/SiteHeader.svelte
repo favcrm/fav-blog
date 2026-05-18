@@ -111,9 +111,10 @@
   }
   .wordmark-text {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 1.4rem;
-    letter-spacing: -0.02em;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .masthead-nav {
@@ -189,14 +190,14 @@
   .mobile-link {
     font-family: var(--font-display);
     font-size: 2.4rem;
-    font-weight: 400;
-    letter-spacing: -0.02em;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
     color: var(--ink-soft);
     padding: 6px 0;
   }
   .mobile-link.active {
     color: var(--accent);
-    font-style: italic;
   }
   .mobile-cta {
     align-self: flex-start;

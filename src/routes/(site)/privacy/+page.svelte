@@ -47,9 +47,10 @@
   .legal h1 {
     margin: 14px 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2.4rem, 6vw, 3.6rem);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .legal-body {

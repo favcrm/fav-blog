@@ -59,17 +59,20 @@
   .about h1 {
     margin: 14px 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2.6rem, 7vw, 4.4rem);
-    line-height: 1;
-    letter-spacing: -0.035em;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .about-lead {
     margin: 1rem 0 0;
     font-family: var(--font-display);
-    font-style: italic;
+    font-weight: 700;
     font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
     color: var(--accent);
   }
   .about-body {

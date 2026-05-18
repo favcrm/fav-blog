@@ -96,10 +96,11 @@
   .archive-head h1 {
     margin: clamp(20px, 3vw, 36px) 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2.6rem, 8vw, 5rem);
-    letter-spacing: -0.035em;
-    line-height: 1;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .filters {

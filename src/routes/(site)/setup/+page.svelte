@@ -114,34 +114,61 @@
         <div class="form-icon done"><Check size={20} strokeWidth={2.2} /></div>
         <h2>Workspace ready</h2>
         <p class="form-hint">
-          Your FavCRM workspace is live on the free plan. Two steps to finish.
+          Your FavCRM workspace is live on the free plan.
         </p>
 
-        <div class="finish-step">
-          <span class="finish-no">A</span>
-          <div>
-            <strong>Connect this site</strong>
-            <p>
-              Add this environment variable to your Vercel project (Settings →
-              Environment Variables), then redeploy:
-            </p>
-            <button
-              class="id-box"
-              type="button"
-              onclick={() => copyId(form.companyId)}
-            >
-              <code>VITE_FAVCRM_COMPANY_ID={form.companyId}</code>
-              {#if copied}
-                <Check size={15} strokeWidth={2} />
-              {:else}
-                <Copy size={15} strokeWidth={1.6} />
-              {/if}
-            </button>
+        {#if form.domainRegistered}
+          <div class="finish-step">
+            <span class="finish-no">✓</span>
+            <div>
+              <strong>Site connected</strong>
+              <p>
+                <code>{form.hostname}</code> is now linked to your workspace —
+                no environment variable, no redeploy. Reload your site and the
+                blog reads live content straight from FavCRM.
+              </p>
+              <a class="btn-site btn-site--primary" href="/">
+                Go to your blog →
+              </a>
+            </div>
           </div>
-        </div>
+        {:else}
+          <div class="finish-step">
+            <span class="finish-no">A</span>
+            <div>
+              <strong>Connect this site</strong>
+              {#if form.isLocalHost}
+                <p>
+                  You ran setup on <code>localhost</code>, so the domain could
+                  not be auto-registered. After deploying, re-run
+                  <code>/setup</code> on the live URL — or add this environment
+                  variable in Vercel and redeploy:
+                </p>
+              {:else}
+                <p>
+                  Automatic domain connection didn&rsquo;t complete. Add this
+                  environment variable in your Vercel project (Settings →
+                  Environment Variables), then redeploy:
+                </p>
+              {/if}
+              <button
+                class="id-box"
+                type="button"
+                onclick={() => copyId(form.companyId)}
+              >
+                <code>VITE_FAVCRM_COMPANY_ID={form.companyId}</code>
+                {#if copied}
+                  <Check size={15} strokeWidth={2} />
+                {:else}
+                  <Copy size={15} strokeWidth={1.6} />
+                {/if}
+              </button>
+            </div>
+          </div>
+        {/if}
 
         <div class="finish-step">
-          <span class="finish-no">B</span>
+          <span class="finish-no">{form.domainRegistered ? "+" : "B"}</span>
           <div>
             <strong>Pick a plan</strong>
             <p>
@@ -195,10 +222,11 @@
   .setup-intro h1 {
     margin: 14px 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(2.4rem, 6vw, 3.8rem);
-    line-height: 1;
-    letter-spacing: -0.035em;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .setup-intro p {
@@ -274,9 +302,10 @@
   .form h2 {
     margin: 4px 0 0;
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 800;
     font-size: 1.7rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
     color: var(--ink);
   }
   .form-hint {

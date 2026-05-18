@@ -1,7 +1,16 @@
 /**
- * Runtime configuration. Every value is optional — with nothing set the
- * template runs in demo mode against the built-in seed content. Set
- * VITE_FAVCRM_COMPANY_ID to connect a real FavCRM workspace (live mode).
+ * Runtime configuration.
+ *
+ * The template runs in demo mode by default — built-in seed content, no
+ * network. A workspace can be supplied two ways, in priority order:
+ *
+ *   1. Resolved at request time from the deployment's own hostname (a
+ *      `storefront_domains` row registered in FavCRM — see `hooks.server.ts`).
+ *      Threaded through the provider via `ProviderContext.companyId`.
+ *   2. The `VITE_FAVCRM_COMPANY_ID` build-time env var — the fallback, mainly
+ *      for local development.
+ *
+ * Either one switches the data provider to live `@favcrm/sdk` responses.
  */
 export const FAVCRM_API_URL =
   (import.meta.env.VITE_FAVCRM_API_URL as string | undefined)?.replace(
@@ -9,6 +18,7 @@ export const FAVCRM_API_URL =
     "",
   ) ?? "https://api.favcrm.io";
 
+/** Build-time workspace UUID fallback. `undefined` in demo mode. */
 export const FAVCRM_COMPANY_ID = (
   import.meta.env.VITE_FAVCRM_COMPANY_ID as string | undefined
 )?.trim();
@@ -17,19 +27,29 @@ export const SITE_URL =
   (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") ??
   "";
 
-/** Live mode = a workspace UUID is configured. Otherwise demo mode. */
-export function isLiveMode(): boolean {
-  return Boolean(FAVCRM_COMPANY_ID);
+/**
+ * Per-request provider context, threaded as the last argument of every async
+ * provider function by SvelteKit `load` functions.
+ *
+ * - `fetch` — the SvelteKit `event.fetch`, so SDK requests correlate with the
+ *   render. Falls back to `globalThis.fetch` for client-side calls.
+ * - `companyId` — the workspace resolved from the request hostname. Wins over
+ *   the `VITE_FAVCRM_COMPANY_ID` env fallback.
+ */
+export type ProviderContext = {
+  fetch?: typeof globalThis.fetch;
+  companyId?: string;
+};
+
+/**
+ * Resolve the effective workspace UUID for a request.
+ * Hostname-resolved companyId wins; the env var is the fallback.
+ */
+export function resolveCompanyId(ctx?: ProviderContext): string | undefined {
+  return ctx?.companyId?.trim() || FAVCRM_COMPANY_ID || undefined;
 }
 
-/** Resolved config for live-mode requests. Throws if called in demo mode. */
-export function requireLiveConfig() {
-  if (!FAVCRM_COMPANY_ID) {
-    throw new Error("VITE_FAVCRM_COMPANY_ID is not configured");
-  }
-  return {
-    apiUrl: FAVCRM_API_URL,
-    companyId: FAVCRM_COMPANY_ID,
-    siteUrl: SITE_URL,
-  };
+/** True once a non-empty workspace UUID is available for this request. */
+export function isLive(ctx?: ProviderContext): boolean {
+  return Boolean(resolveCompanyId(ctx));
 }

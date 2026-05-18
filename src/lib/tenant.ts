@@ -2,12 +2,14 @@
  * Site/brand configuration resolver.
  *
  * Demo mode: returns the publication identity from the seed `brand.ts`.
- * Live mode: reads brand fields from the connected FavCRM workspace.
+ * Live mode: reads brand fields from the connected FavCRM workspace, resolved
+ * per request from the deployment hostname (or the env-var fallback).
  *
  * Either way the shape is the same, so the layout and pages never branch on
  * mode themselves.
  */
-import { FAVCRM_API_URL, FAVCRM_COMPANY_ID, isLiveMode } from "$lib/config";
+import { FAVCRM_API_URL, resolveCompanyId } from "$lib/config";
+import type { ProviderContext } from "$lib/config";
 import { unwrapApiResponse } from "$lib/api-envelope";
 import { brand as demoBrand } from "$lib/data/mock/brand";
 
@@ -38,13 +40,15 @@ const demoConfig: TenantConfig = {
 };
 
 export async function fetchTenantConfig(
-  fetchFn: typeof globalThis.fetch,
+  ctx?: ProviderContext,
 ): Promise<TenantConfig> {
-  if (!isLiveMode() || !FAVCRM_COMPANY_ID) return demoConfig;
+  const companyId = resolveCompanyId(ctx);
+  if (!companyId) return demoConfig;
 
-  const cached = cache.get(FAVCRM_COMPANY_ID);
+  const cached = cache.get(companyId);
   if (cached && cached.expiresAt > Date.now()) return cached.config;
 
+  const fetchFn = ctx?.fetch ?? globalThis.fetch;
   try {
     const res = await fetchFn(
       `${FAVCRM_API_URL}/v6/customer-portal/company/modules`,
@@ -52,7 +56,7 @@ export async function fetchTenantConfig(
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "X-Company-Id": FAVCRM_COMPANY_ID,
+          "X-Company-Id": companyId,
         },
       },
     );
@@ -71,10 +75,7 @@ export async function fetchTenantConfig(
         | string
         | null,
     };
-    cache.set(FAVCRM_COMPANY_ID, {
-      config,
-      expiresAt: Date.now() + TTL_MS,
-    });
+    cache.set(companyId, { config, expiresAt: Date.now() + TTL_MS });
     return config;
   } catch {
     // Live mode but the workspace is unreachable — fall back to demo identity

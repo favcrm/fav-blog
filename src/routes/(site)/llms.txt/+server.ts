@@ -3,11 +3,12 @@ import { fetchTenantConfig } from "$lib/tenant";
 import type { RequestHandler } from "./$types";
 
 /** llmstxt.org directory — an agent-friendly index of the publication. */
-export const GET: RequestHandler = async ({ fetch, url }) => {
+export const GET: RequestHandler = async ({ fetch, url, locals }) => {
   const base = url.origin;
+  const ctx = { fetch, companyId: locals.companyId };
   const [tenant, result] = await Promise.all([
-    fetchTenantConfig(fetch),
-    listPosts(fetch, { limit: 30 }).catch(() => null),
+    fetchTenantConfig(ctx),
+    listPosts({ limit: 30 }, ctx).catch(() => null),
   ]);
   const posts = result?.items ?? [];
 

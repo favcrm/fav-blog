@@ -56,12 +56,20 @@ export const actions: Actions = {
     return { step: "otp" as const, email };
   },
 
-  verify: async ({ request, fetch }) => {
+  verify: async ({ request, fetch, url }) => {
     const form = await request.formData();
     const email = String(form.get("email") ?? "")
       .trim()
       .toLowerCase();
     const otp = String(form.get("otp") ?? "").trim();
+
+    // The deployment's own hostname — registered as a storefront domain so the
+    // site resolves its workspace without a companyId env var. Skipped for
+    // local hosts (a `localhost` domain row would be useless).
+    const hostname = url.hostname.toLowerCase();
+    const isLocalHost = ["localhost", "127.0.0.1", "0.0.0.0"].includes(
+      hostname,
+    );
 
     if (!email) {
       return fail(400, { step: "email", error: "Start over — email missing." });
@@ -77,7 +85,11 @@ export const actions: Actions = {
     const res = await fetch(`${FAVCRM_API_URL}/v6/dev/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp }),
+      body: JSON.stringify({
+        email,
+        otp,
+        ...(isLocalHost ? {} : { hostname }),
+      }),
     });
 
     if (!res.ok) {
@@ -92,6 +104,7 @@ export const actions: Actions = {
       apiKey: string;
       companyId: string;
       mcpEndpoint: string;
+      domainRegistered?: boolean;
     }>(await res.json());
 
     return {
@@ -100,6 +113,9 @@ export const actions: Actions = {
       companyId: result.companyId,
       apiKey: result.apiKey,
       mcpEndpoint: result.mcpEndpoint,
+      hostname,
+      isLocalHost,
+      domainRegistered: result.domainRegistered ?? false,
     };
   },
 };

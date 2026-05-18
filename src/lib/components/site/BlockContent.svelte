@@ -144,11 +144,12 @@
   }
   .prose :global(blockquote) {
     margin: 1.8em 0;
-    padding: 0.2em 0 0.2em 1.4rem;
-    border-left: 3px solid var(--accent);
+    padding: 0.4em 0 0.4em 1.4rem;
+    border-left: 4px solid var(--accent);
     font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-style: italic;
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 1.3;
     color: var(--ink);
   }
   .prose :global(blockquote cite) {

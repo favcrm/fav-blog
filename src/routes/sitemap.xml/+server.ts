@@ -1,9 +1,12 @@
 import { listPosts } from "$lib/data/provider";
 import type { RequestHandler } from "./$types";
 
-export const GET: RequestHandler = async ({ fetch, url }) => {
+export const GET: RequestHandler = async ({ fetch, url, locals }) => {
   const base = url.origin;
-  const result = await listPosts(fetch, { limit: 200 }).catch(() => null);
+  const result = await listPosts(
+    { limit: 200 },
+    { fetch, companyId: locals.companyId },
+  ).catch(() => null);
 
   const urls: {
     loc: string;
