@@ -4,9 +4,12 @@
   let {
     brandName = "Offhours",
     brandLogoUrl = null,
+    isLive = false,
   }: {
     brandName?: string;
     brandLogoUrl?: string | null;
+    /** Live mode = connected to a workspace. Hides the demo "Start a blog" CTA. */
+    isLive?: boolean;
   } = $props();
 
   let menuOpen = $state(false);
@@ -50,7 +53,9 @@
           {item.label}
         </a>
       {/each}
-      <a class="masthead-cta" href="/setup">Start a blog</a>
+      {#if !isLive}
+        <a class="masthead-cta" href="/setup">Start a blog</a>
+      {/if}
     </nav>
 
     <button
@@ -80,9 +85,11 @@
         </a>
       {/each}
     </nav>
-    <a class="mobile-cta" href="/setup" onclick={() => (menuOpen = false)}>
-      Start your own blog →
-    </a>
+    {#if !isLive}
+      <a class="mobile-cta" href="/setup" onclick={() => (menuOpen = false)}>
+        Start your own blog →
+      </a>
+    {/if}
   </div>
 {/if}
 

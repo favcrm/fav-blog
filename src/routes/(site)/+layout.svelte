@@ -10,6 +10,7 @@
   const brandName = $derived(data.tenant.brandName);
   const brandTagline = $derived(data.tenant.brandTagline);
   const brandLogoUrl = $derived(data.tenant.brandLogoUrl);
+  const isLive = $derived(data.tenant.isLive);
 </script>
 
 <svelte:head>
@@ -18,7 +19,7 @@
 </svelte:head>
 
 <div class="site">
-  <SiteHeader {brandName} {brandLogoUrl} />
+  <SiteHeader {brandName} {brandLogoUrl} {isLive} />
   <main>
     {@render children()}
   </main>
