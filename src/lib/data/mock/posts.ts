@@ -269,12 +269,6 @@ export const posts: BlogPost[] = seeds
   .map(makePost)
   .sort((a, b) => (a.publishedAt! < b.publishedAt! ? 1 : -1));
 
-/** List-view projection (drops `blocks` / `companyId` / `meta`). */
-export function toListItem(post: BlogPost): BlogPostListItem {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { companyId, blocks, seoTitle, seoDescription, meta, ...rest } = post;
-  /* eslint-enable @typescript-eslint/no-unused-vars */
-  return rest;
-}
-
-export const postListItems: BlogPostListItem[] = posts.map(toListItem);
+/** List-view projection. `BlogPost` extends `BlogPostListItem`, so the full
+ *  posts are already valid list items. */
+export const postListItems: BlogPostListItem[] = posts;
