@@ -89,8 +89,38 @@ workspace instead.
 - **About / Contact / Privacy / Terms** — publication pages
 - **Setup** (`/setup`) — in-app workspace registration
 - **Admin** (`/admin`) — essay, category, subscriber and announcement management
+- **MCP** (`/mcp`) — template-hosted Model Context Protocol endpoint for
+  AI agents to consume the resolved FavCRM workspace
 - **SEO** — `sitemap.xml`, `robots.txt`, `/llms.txt`, and per-essay
   `/blog/[slug]/llms.txt` Markdown views for AI crawlers
+
+## MCP for AI agents
+
+The template exposes a Streamable HTTP MCP endpoint at **`/mcp`**. It resolves
+the FavCRM workspace the same way as the site itself: registered hostname first,
+then `VITE_FAVCRM_COMPANY_ID`.
+
+Public tools and resources cover blog search, products, services, and booking
+slot discovery. Customer-owned reads and guarded actions require a customer
+bearer token:
+
+```http
+Authorization: Bearer <customer token>
+```
+
+The endpoint also publishes OAuth protected-resource metadata at
+`/.well-known/oauth-protected-resource` and
+`/.well-known/oauth-protected-resource/mcp`. FavCRM remains the authorization
+server; this template does not expose merchant admin APIs or merchant API keys
+through MCP.
+
+Initial MCP tools include:
+
+- `search_blog`, `list_products`, `get_product`
+- `list_booking_services`, `get_booking_slots`, `create_guest_booking`
+- `list_my_bookings`, `cancel_my_booking`, `reschedule_my_booking`
+- `list_my_orders`, `list_my_invoices`
+- `create_contact_enquiry`, `create_order`
 
 ## Content blocks
 
